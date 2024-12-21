@@ -3,31 +3,39 @@ input_data = "82 84 85 87 90 92 93 91/7 10 12 14 17 19 22 22/66 68 69 72 74 78/1
 string2 = "7 6 4 2 1/1 2 7 8 9/9 7 6 2 1/1 3 2 4 5/8 6 4 4 1/1 3 6 7 9"
 reports = [rpt.split(' ') for rpt in input_data.split('/') if rpt]
 print(reports)
+safes = 670
 
 def isSafe(rpt):
     diffs = np.diff(rpt)
     # checks if differences bwtn adj. levels is above 1 and under 3
     if max(diffs) > 3 or min(diffs) < -3 or 0 in diffs:
+        #print(f"UNSAFE TEMP \n report: {rpt} \n diffs: {diffs}")
         return False
     # checks if report always increases/decreases
     elif sorted(rpt) != rpt and sorted(rpt)[::-1] != rpt:
+        #print(f"UNSAFE TEMP \n report: {rpt} \n diffs: {diffs}")
         return False
     else:
         return True
 
 
-safes = 0
 for rpt in reports:
     rpt = list(np.array(rpt, dtype=int))
-    probDampener = False
-    for lvl in rpt:
-        temp = rpt.copy()
-        temp.remove(lvl)
-        if isSafe(temp):
-            if not probDampener:
-                print(f"SAFE \n report: {rpt}")
-                safes += 1
-                probDampener = True
+    if not isSafe(rpt):
+    #     # print(f"ALREADY SAFE: {rpt}")
+    #     # safes += 1
+    #     continue
+    # else:
+        probDampener = False
+        for lvl in rpt:
+            temp = rpt.copy()
+            temp.remove(lvl)
+            #print(f"TEMPS: {temp}")
+            if isSafe(temp):
 
+                # if not probDampener:
+                probDampener = True
+                safes += 1
+                continue
 
 print(safes)
